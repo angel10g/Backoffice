@@ -183,40 +183,40 @@ document.addEventListener("DOMContentLoaded", function () {
     const ordersCount = ordersData.length;
 
     // Create the Recent Orders Chart
-    document.addEventListener("DOMContentLoaded", function () {
-        // Fetch orders from localStorage and create the chart
-        const ordersData = JSON.parse(localStorage.getItem('orders')) || []; // Retrieve orders from localStorage
-
-        // Debugging: Check the fetched data in the console
-        console.log('Orders Data:', ordersData);
-
-        if (ordersData.length === 0) {
-            console.log('No orders data available in localStorage');
-            return; // Exit if no data is available
-        }
-
-        // Create the Recent Orders Chart
-        const ctx2 = document.getElementById('recentOrdersChart').getContext('2d');
-        new Chart(ctx2, {
-            type: 'pie', // Pie chart
-            data: {
-                labels: ['Done Orders', 'Pending Orders'],
-                datasets: [{
-                    data: [
-                        ordersData.filter(order => order.payment === 'done').length, // Completed orders
-                        ordersData.filter(order => order.payment === 'processing').length // Pending orders
-                    ],
-                    backgroundColor: ['#ff6f61', '#d3d3d3'],
-                }]
-            },
-            options: {
-                responsive: true,
-            }
-        });
-    });
+   
 
 });
+document.addEventListener("DOMContentLoaded", function () {
+    // Fetch orders from localStorage and create the chart
+    const ordersData = JSON.parse(localStorage.getItem('orders')) || []; // Retrieve orders from localStorage
 
+    // Debugging: Check the fetched data in the console
+    console.log('Orders Data:', ordersData);
+
+    if (ordersData.length === 0) {
+        console.log('No orders data available in localStorage');
+        return; // Exit if no data is available
+    }
+
+    // Create the Recent Orders Chart
+    const ctx2 = document.getElementById('recentOrdersChart').getContext('2d');
+    new Chart(ctx2, {
+        type: 'pie', // Pie chart
+        data: {
+            labels: ['Done Orders', 'Pending Orders'],
+            datasets: [{
+                data: [
+                    ordersData.filter(order => order.payment === 'done').length, // Completed orders
+                    ordersData.filter(order => order.payment === 'processing').length // Pending orders
+                ],
+                backgroundColor: ['#ff6f61', '#d3d3d3'],
+            }]
+        },
+        options: {
+            responsive: true,
+        }
+    });
+});
 
 // For the Order Status Chart (Shipped / Delivered / Pending)
 document.addEventListener("DOMContentLoaded", function () {
