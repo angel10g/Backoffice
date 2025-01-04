@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Orders</title>
+    <link rel="stylesheet" href="Css/style.css">
+    <style>
+        .recent-order button{
+            color: plum;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div class="recent-order">
+            <h2>Orders</h2>
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Book Name <button onclick="sortTable(0)">Sort</button></th>
+                        <th>Author <button onclick="sortTable(1)">Sort</button></th>
+                        <th>Payment <button onclick="sortTable(2)">Sort</button></th>
+                        <th>Status <button onclick="sortTable(3)">Sort</button></th>
+                        <th>Price <button onclick="sortTable(4)">Sort</button></th> 
+                        <th>Date </th>                      
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data will be dynamically inserted here -->
+                </tbody>
+            </table>
+            <a href="allorders.html">Show All</a>
+        </div>
+    </main>
+
+    <script>
+        // Fetch orders from localStorage and display them in the table
+        const recentorders = JSON.parse(localStorage.getItem('orders')) || []; // Retrieve orders from localStorage
+        
+        const tableBody = document.querySelector('#dataTable tbody'); // Get the tbody of the table
+        // Check if we have any orders in localStorage
+        if (recentorders.length === 0) {
+            // If no orders are found in localStorage, display a message
+            const row = document.createElement('tr');
+            row.innerHTML = `<td colspan="6">No orders found.</td>`; // A message that no orders exist
+            tableBody.appendChild(row);
+        } else {
+            // Loop through each order and create a table row
+            recentorders.forEach(order => {
+                const row = document.createElement('tr'); // Create a table row
+
+                // Insert the order details into the row
+                row.innerHTML = `
+                    <td>${order.title}</td>
+                    <td>${order.author}</td>
+                    <td>${order.payment}</td>
+                    <td>${order.status}</td>
+                    <td>${order.price}</td>
+                    <td>${order.date}</td>
+                `;
+
+                // Append the row to the tbody
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Function to sort the table by column index
+        function sortTable(columnIndex) {
+            const table = document.getElementById("dataTable");
+            const rows = Array.from(table.rows).slice(1); // Get all rows except the header
+            let ascending = table.rows[0].cells[columnIndex].getAttribute('data-sort-order') === 'asc';
+
+            rows.sort((a, b) => {
+                const aText = a.cells[columnIndex].innerText.trim();
+                const bText = b.cells[columnIndex].innerText.trim();
+
+                // Convert numeric data to numbers, else treat it as a string
+                const aValue = isNaN(aText) ? aText : parseFloat(aText);
+                const bValue = isNaN(bText) ? bText : parseFloat(bText);
+
+                let comparison = 0;
+                if (aValue < bValue) {
+                    comparison = -1;
+                } else if (aValue > bValue) {
+                    comparison = 1;
+                }
+
+                // If ascending is true, return the result as-is; otherwise, invert the order
+                return ascending ? comparison : -comparison;
+            });
+
+            // Re-append the rows in the sorted order
+            rows.forEach(row => table.appendChild(row));
+
+            // Toggle the sort order for the column (for visual feedback if necessary)
+            table.rows[0].cells[columnIndex].setAttribute('data-sort-order', ascending ? 'desc' : 'asc');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f7f6;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-image: url(img/Cover.jpeg);
+    }
+
+    .form-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        box-sizing: border-box;
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-size: 14px;
+        font-weight: bold;
+        color: #555;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    button {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 14px;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+        border-color: #007bff;
+        outline: none;
+    }
+
+    button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    .form-container .error {
+        color: red;
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    .form-container .success {
+        color: green;
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+    </style>
+</head>
+<body>
+    <!-- Form of sign in  -->
+    <form action="" method="post" id="signin-form">
+        <div>
+            <label for="num" style="color: white;">Identificateur ou Email:</label>
+            <input type="text" id="num" name="num">
+       </div>
+        <div>
+            <label for="password" style="color: white;">Mot de passe:</label>
+            <input type="password" id="password" name="password2">
+        </div>
+        <div id="prob">
+        </div>
+        <button type="submit" name="signin">Signin</button>
+    </form>
+
+    <script>
+        // Sign in script
+        document.getElementById('signin-form').addEventListener('submit', function(event) {
+            event.preventDefault(); 
+            const user = { iden: '1234', pswd: 'me1234' }; 
+            const id = document.getElementById('num').value;
+            const pwd = document.getElementById('password').value;
+            const prob = document.getElementById('prob');
+
+            // Check if user id and password match
+            if (id === user.iden && pwd === user.pswd) {
+                window.location.href = 'index.html';
+            } else {
+                prob.innerHTML = "Mot de passe ou identifiant incorrecte"; 
+                prob.className = 'error'; 
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bills Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .generate-pdf-btn {
+            background-color: plum;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .generate-pdf-btn:hover {
+            background-color: purple;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+
+<body>
+
+    <h1>Bills Information</h1>
+
+    <table id="billsTable">
+        <thead>
+            <tr>
+                <th>Client Name</th>
+                <th>Date</th>
+                <th>Book Title</th>
+                <th>Author</th>
+                <th>Price</th>
+                <th>Generate PDF</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be dynamically added here -->
+        </tbody>
+    </table>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Load orders data from localStorage (Assume orders are already stored in localStorage)
+            const storedOrders = localStorage.getItem('orders');
+            let orders = storedOrders ? JSON.parse(storedOrders) : [];
+
+            // Filter only orders with payment status "done"
+            const paidOrders = orders.filter(order => order.payment === 'done');
+
+            // Generate bills based on filtered orders
+            const tableBody = document.querySelector('#billsTable tbody');
+            paidOrders.forEach(order => {
+                const row = document.createElement('tr');
+                
+                // Display order details in the table
+                row.innerHTML = `
+                    <td>${order.clientName}</td>
+                    <td>${order.date}</td>
+                    <td>${order.title}</td>
+                    <td>${order.author}</td>
+                    <td>$${parseFloat(order.price).toFixed(2)}</td>
+                    <td>
+                        <button class="generate-pdf-btn">Generate PDF</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+
+                // Get the button and add an event listener to generate PDF
+                const button = row.querySelector(".generate-pdf-btn");
+                button.addEventListener("click", function () {
+                    generatePDF(order.clientName, order.date, order.title, order.author, order.price);
+                });
+            });
+        });
+
+        // Function to generate the PDF bill
+        function generatePDF(clientName, date, title, author, price) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Set up the content for the PDF
+            doc.setFontSize(16);
+            doc.text('Bill Details', 20, 20);
+            doc.setFontSize(12);
+            doc.text(`Client Name: ${clientName}`, 20, 40);
+            doc.text(`Date: ${date}`, 20, 50);
+            doc.text(`Title: ${title}`, 20, 60);
+            doc.text(`Author: ${author}`, 20, 70);
+            doc.text(`Total Price: $${parseFloat(price).toFixed(2)}`, 20, 80);
+
+            // Save the PDF with the dynamic bill number
+            doc.save(`bill_${clientName}.pdf`);
+        }
+
+        // Function to handle adding a new order
+        function addNewOrder(order) {
+            // Retrieve the last bill number from localStorage or set to 1 if not available
+            let lastBillNumber = localStorage.getItem('lastBillNumber');
+            lastBillNumber = lastBillNumber ? parseInt(lastBillNumber) + 1 : 1;
+
+            // Add the new order with the new bill number
+            order.billNumber = lastBillNumber; // Add the bill number to the order
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+            orders.push(order); // Push the new order into the orders array
+            localStorage.setItem('orders', JSON.stringify(orders)); // Store the updated orders array
+
+            // Update the lastBillNumber in localStorage
+            localStorage.setItem('lastBillNumber', lastBillNumber);
+
+            // Refresh the bill table
+            window.location.reload(); // This will reload the page and refresh the table
+        }
+
+        // Example of adding a new order
+       
+    </script>
+
+</body>
+
+</html>

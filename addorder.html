@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adding Order</title>
+    <link rel="stylesheet" href="Css/style.css">
+    <style>
+        button {
+            padding: 10px 20px;
+            background-color: plum;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input,
+        select {
+            padding: 8px;
+            margin: 5px 0;
+            width: 100%;
+        }
+
+        #h {
+            text-align: center;
+            font-size: medium;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2 id="h">Add a new Order</h2>
+    <form id="createForm">
+        <label for="clientName">Client Name: </label>
+        <input type="text" id="clientName" required>
+        
+        <label for="title">Title: </label>
+        <input type="text" id="title" required>
+
+        <label for="author">Author: </label>
+        <input type="text" id="author" required>
+
+        <label for="price">Price: </label>
+        <input type="number" id="price" required step="0.01">
+
+        <label for="date">Date: </label>
+        <!-- Changed to date input to allow calendar input -->
+        <input type="date" id="date" required>
+
+        <label for="payment">Payment Status: </label>
+        <select id="payment" required>
+            <option value="done">Done</option>
+            <option value="processing">Processing</option>
+        </select>
+
+        <label for="status">Order Status: </label>
+        <select id="status" required>
+            <option value="shipped">Shipped</option>
+            <option value="delivered">Delivered</option>
+            <option value="pending">Pending</option>
+        </select>
+
+        <button type="submit">Add Order</button>
+    </form>
+
+    <main>
+        <h3 id="h">Table of Orders</h3>
+        <div class="recent-order">
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Price</th>
+                        <th>Date</th>
+                        <th>Payment Status</th>
+                        <th>Order Status</th>
+                        <th>Client</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Orders will be shown here -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+let books = [];  // Declare the books array to avoid the ReferenceError
+let orders = [];
+
+// Load books and orders from localStorage
+function loadData() {
+    const storedBooks = localStorage.getItem('books');
+    const storedOrders = localStorage.getItem('orders');
+    if (storedBooks) {
+        books = JSON.parse(storedBooks);
+    }
+    if (storedOrders) {
+        orders = JSON.parse(storedOrders);
+    }
+    displayOrders();
+}
+
+// Save books and orders to localStorage
+function saveToLocalStorage() {
+    localStorage.setItem('books', JSON.stringify(books));
+    localStorage.setItem('orders', JSON.stringify(orders));
+}
+
+// Function to display the orders in the table
+function displayOrders() {
+    const tableBody = document.querySelector('#dataTable tbody');
+    tableBody.innerHTML = ''; // Clear existing data
+
+    orders.forEach((order, index) => {
+        const row = document.createElement('tr');
+
+        // Create table cells
+        const clientNameCell = document.createElement('td'); // Add the client name column
+        clientNameCell.textContent = order.clientName;
+
+        const titleCell = document.createElement('td');
+        titleCell.textContent = order.title;
+
+        const authorCell = document.createElement('td');
+        authorCell.textContent = order.author;
+
+        const priceCell = document.createElement('td');
+        priceCell.textContent = `$${parseFloat(order.price).toFixed(2)}`;
+
+        const dateCell = document.createElement('td');
+        dateCell.textContent = order.date;  // Display date
+
+        const paymentStatusCell = document.createElement('td');
+        paymentStatusCell.textContent = order.payment;
+
+        const orderStatusCell = document.createElement('td');
+        orderStatusCell.textContent = order.status;
+
+        
+
+        // Action buttons (Edit, Delete)
+        const actionsCell = document.createElement('td');
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        editButton.onclick = () => editOrder(index);
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.onclick = () => deleteOrder(index);
+
+        actionsCell.appendChild(editButton);
+        actionsCell.appendChild(deleteButton);
+
+        // Append cells to row
+        row.appendChild(titleCell);
+        row.appendChild(authorCell);
+        row.appendChild(priceCell);
+        row.appendChild(dateCell);
+        row.appendChild(paymentStatusCell);
+        row.appendChild(orderStatusCell);
+        row.appendChild(clientNameCell); // Add the client name cell
+        row.appendChild(actionsCell);
+
+        // Append row to table body
+        tableBody.appendChild(row);
+    });
+}
+
+// Handle form submission and add a new order
+document.getElementById('createForm').addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const title = document.getElementById('title').value;
+    const author = document.getElementById('author').value;
+    const price = document.getElementById('price').value;
+    const payment = document.getElementById('payment').value;
+    const status = document.getElementById('status').value;
+    const date = document.getElementById('date').value;  // Get the date from the input
+    const clientName = document.getElementById('clientName').value; // Get the client name
+
+    // Check if the book exists in localStorage
+    const bookExists = books.some(book => book.title.toLowerCase() === title.toLowerCase());
+
+    if (bookExists) {
+        orders.push({ title, author, price, date, payment, status, clientName });  // Include the client name
+        saveToLocalStorage(); // Save to localStorage
+        displayOrders(); // Update table
+        document.getElementById('createForm').reset(); // Clear form
+    } else {
+        alert('This book is not available in our inventory.');
+    }
+});
+
+// Edit order
+function editOrder(index) {
+    const newTitle = prompt('Enter new title:', orders[index].title);
+    const newAuthor = prompt('Enter new author:', orders[index].author);
+    const newPrice = prompt('Enter new price:', orders[index].price);
+    const newPayment = prompt('Enter new payment status:', orders[index].payment);
+    const newStatus = prompt('Enter new order status:', orders[index].status);
+    const newDate = prompt('Enter new date (YYYY-MM-DD):', orders[index].date);
+    const newClientName = prompt('Enter new client name:', orders[index].clientName); // Ask for the new client name
+
+    if (newTitle && newAuthor && newPrice && newPayment && newStatus && newDate && newClientName) {
+        orders[index] = { title: newTitle, author: newAuthor, price: newPrice, date: newDate, payment: newPayment, status: newStatus, clientName: newClientName };
+        saveToLocalStorage(); // Save the updated data
+        displayOrders(); // Update table
+    }
+}
+
+// Delete order
+function deleteOrder(index) {
+    if (confirm('Are you sure you want to delete this order?')) {
+        orders.splice(index, 1);
+        saveToLocalStorage(); // Save the updated data
+        displayOrders(); // Update table
+    }
+}
+
+// Load the data when the page is loaded
+loadData();
+
+</script>
+
+
+</body>
+
+</html>

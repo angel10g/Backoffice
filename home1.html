@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Shop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="Css/style1.css"> 
+</head>
+<style>
+    .content{
+        background-image: url(img/Cover.jpeg);
+    }
+</style>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <h1>Book Shop</h1>
+        </div>
+        <ul class="menu">
+            <li><a href="#" class="active">Acceuil</a></li>
+            <li><a href="#">Nouveautés</a></li>
+            <li class="user-menu">
+                <a href="signin1.html" class="fa-solid fa-user"></a>
+            </li>
+            <li><a href="#" class="fa-solid fa-cart-shopping"></a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content Section -->
+    <section class="content">
+        <h1 style="color: whitesmoke;">Nouveautés</h1>
+        <p style="color: whitesmoke;">Notre nouveau catalogue avec les livres les plus visités</p>
+        <button class="btn-discover">DECOUVRIR</button>
+    </section>
+
+    <!-- Best Sellers Section -->
+    <h1 class="produits-text" style="text-align: center;">Nos meilleures ventes</h1>
+    <section class="section-produits">
+        <div class="produits" id="produits-container">
+            <!-- Products will be dynamically inserted here -->
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 <a href="#">E-Shop</a></p>
+    </footer>
+
+    <script>
+        
+    
+
+        // Load books from localStorage and display them
+        function loadBooks() {
+            const storedBooks = localStorage.getItem('books'); // Get books from localStorage
+            
+            if (storedBooks) {
+                const books = JSON.parse(storedBooks); // Parse the stored data
+
+                const produitsContainer = document.getElementById('produits-container');
+                produitsContainer.innerHTML = ''; // Clear any existing books in the container
+
+                // Loop through each book and create HTML to display it
+                books.forEach(book => {
+                    // Create a new div for each book
+                    const bookDiv = document.createElement('div');
+                    bookDiv.classList.add('produit');
+                    
+                    // Insert the book details into the div (without the cover image)
+                    bookDiv.innerHTML = `
+                        <div class="book-info">
+                            <h3>${book.title}</h3>
+                            <p>Author: ${book.author}</p>
+                            <p>Price: $${book.price}</p>
+                            <button class="btn-buy">Acheter</button>
+                        </div>
+                    `;
+                    
+                    // Append the new book div to the produits-container
+                    produitsContainer.appendChild(bookDiv);
+                });
+            } else {
+                console.log('No books found in localStorage.');
+            }
+        }
+
+        // Load the books when the page is loaded
+        window.onload = function() {
+            loadBooks(); // Call the function to load books from localStorage
+        };
+
+    </script>
+</body>
+</html>

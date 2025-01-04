@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Gestion de bibliothéque</title>
+    <link rel="stylesheet" href="Css/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<!-- Side bar and logo -->
+<body>
+    <div class="container">
+        <aside>
+            <div class="top">
+                <div class="logo">
+                    <img src="img/imglogo.png">
+                    <h2>Biblio<span class="danger">theque</span></h2>
+                </div>
+                <div class="sidebar">
+                    <a href="#">
+                        <span class="material-icons">grid_view</span>
+                        <h3> Dashboard</h3>
+                    </a>
+                    <a href="#" class="active">
+                        <span class="material-icons">person_outline</span>
+                        <h3> Customers</h3>
+                    </a>
+                    <a href="allorders.html">
+                        <span class="material-icons">receipt_long</span>
+                        <h3> Orders</h3>
+                    </a>
+                    <a href="bills.html">
+                        <span class="material-icons">insights</span>
+                        <h3>Bills</h3>
+                    </a>
+                    <a href="#">
+                        <span class="material-icons">mail_outline</span>
+                        <h3> Messages</h3>
+                        <span class="message-count">12</span>
+                    </a>
+                    <a href="allbooks.html">
+                        <span class="material-icons"> library_books </span>
+                        <h3>Books</h3>
+                    </a>
+                    <a href="addorder.html">
+                        <span class="material-icons">add </span>
+                        <h3> Add Order</h3>
+                    </a>
+                    <a href="addnewbook.html">
+                        <span class="material-icons">add</span>
+                        <h3> Add Book</h3>
+                    </a>
+                    <a href="home1.html">
+                        <span class="material-icons">logout</span>
+                        <h3> Logout</h3>
+                    </a>
+                </div>
+            </div>
+        </aside>
+        <!-- Start of Main -->
+        <main>
+            <h1>Dashboard</h1>
+            <div class="date">
+                <input type="date">
+            </div>
+            <div class="insights">
+                <div class="sales">
+                    <span class="material-icons">analytics</span>
+                    <div class="middle">
+                        <div class="left">
+                            <h3>Total Sales</h3>
+                            <h1 id="total-sales">$0</h1>
+                        </div>
+                        <div class="progress">
+                            <svg>
+                                <circle cx="38" cy="38" r="36"></circle>
+                            </svg>
+                            <div class="number">
+                                <p id="sales-percentage">0%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="expenses">
+                    <span class="material-icons">bar_chart</span>
+                    <div class="middle">
+                        <div class="left">
+                            <h3> Total Expenses </h3>
+                            <h1 id="total-expenses">$0.00</h1> >
+                        </div>
+                        <div class="progress">
+                            <svg>
+                                <circle cx="38" cy="38" r="36" stroke="gray" stroke-width="4" fill="none"></circle>
+                                <circle cx="38" cy="38" r="36" stroke="green" stroke-width="4" fill="none"
+                                    stroke-dasharray="226.195" stroke-dashoffset="226.195"></circle>
+                            </svg>
+                            <div class="number">
+                                <p id="expenses-percentage">0%</p> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="income">
+                    <span class="material-icons">analytics</span>
+                    <div class="middle">
+                        <div class="left">
+                            <h3> Total Income </h3>
+                            <h1 id="totalIncome">$0</h1> 
+                        </div>
+                        <div class="progress">
+                            <svg>
+                                <circle cx="38" cy="38" r="36"></circle>
+                            </svg>
+                            <div class="number">
+                                <p id="income-percentage">0%</p> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Chart for the number of books -->
+            <div class="books-chart">
+                <h2>Books Available</h2>
+                <canvas id="booksChart" width="200" height="200"></canvas>
+            </div>
+
+            <!-- Chart for recent orders -->
+            <div class="recent-orders-chart">
+                <h2>Recent Orders</h2>
+                <canvas id="recentOrdersChart" width="400" height="400"></canvas>
+            </div>
+            <div>
+                <h2>Orders </h2>
+                <canvas id="orderStatusChart" width="200" height="200"></canvas>
+
+            </div>
+
+        </main>
+        <!-- End Of main -->
+         <!-- Theme changing -->
+        <div class="right">
+            <div class="top">
+                <div class="theme-toggler">
+                    <span class="material-icons active">light_mode</span>
+                    <span class="material-icons">dark_mode</span>
+                </div>
+                <div class="profile">
+                    <div class="info">
+                        <p> hey ,<b> Ghita </b></p>
+                        <small class="text-muted">Admin</small>
+                    </div>
+                    <div class="profile-photo">
+                        <img src="img/admin.png">
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="recent-update">
+                <h2> Recent Updates </h2>
+            </div>
+
+        </div>
+
+
+    </div>
+    <script src="Js/index.js"></script>
+</body>
+
+</html>

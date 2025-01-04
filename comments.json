@@ -1,0 +1,22 @@
+[
+    {
+        "name": "Mike",
+        "comment": "Received his order"
+    },
+    {
+        "name": "Sara",
+        "comment": "Order is in progress"
+    },
+    {
+        "name": "John",
+        "comment": "Order shipped"
+    },
+    {
+        "name": "Alice",
+        "comment": "Payment completed"
+    },
+    {
+        "name": "Bob",
+        "comment": "Order canceled"
+    }
+]

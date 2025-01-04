@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adding Book</title>
+  <link rel="stylesheet" href="Css/style.css">
+  <style>
+    button {
+      padding: 10px 20px;
+      background-color: plum;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    input {
+      padding: 8px;
+    }
+
+    #h {
+      text-align: center;
+      font-size: medium;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2 id="h">Add a new Book</h2>
+  <form id="createForm">
+    <label for="title">Title: </label>
+    <input type="text" id="title" required>
+    <label for="author">Author: </label>
+    <input type="text" id="author" required>
+    <label for="price">Price: </label>
+    <input type="number" id="price" required step="0.01">
+    <button type="submit">Add Book</button>
+  </form>
+
+  <main>
+    <h3 id="h">Table of Books</h3>
+    <div class="recent-order">
+      <table id="dataTable">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Price</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- where the books will be shown -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    let data = [];
+
+    // Load data from localStorage
+    function loadData() {
+      const storedData = localStorage.getItem('books');
+      if (storedData) {
+        data = JSON.parse(storedData);
+        displayData();
+      } else {
+        data = [];
+      }
+    }
+
+    // Save data to localStorage
+    function saveToLocalStorage() {
+      localStorage.setItem('books', JSON.stringify(data));
+    }
+
+    // Function to display the data in the table
+    function displayData() {
+      const tableBody = document.querySelector('#dataTable tbody');
+      tableBody.innerHTML = ''; // Clear existing data
+
+      data.forEach((item, index) => {
+        const row = document.createElement('tr');
+
+        // Create table cells
+        const titleCell = document.createElement('td');
+        titleCell.textContent = item.title;
+
+        const authorCell = document.createElement('td');
+        authorCell.textContent = item.author;
+
+        const priceCell = document.createElement('td');
+        priceCell.textContent = `$${parseFloat(item.price).toFixed(2)}`;
+
+        // Action buttons (Edit, Delete)
+        const actionsCell = document.createElement('td');
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        editButton.onclick = () => editRecord(index);
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.onclick = () => deleteRecord(index);
+
+        actionsCell.appendChild(editButton);
+        actionsCell.appendChild(deleteButton);
+
+        // Append cells to row
+        row.appendChild(titleCell);
+        row.appendChild(authorCell);
+        row.appendChild(priceCell);
+        row.appendChild(actionsCell);
+
+        // Append row to table body
+        tableBody.appendChild(row);
+      });
+    }
+
+    // Handle form submission and add a new book
+    document.getElementById('createForm').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const title = document.getElementById('title').value;
+      const author = document.getElementById('author').value;
+      const price = document.getElementById('price').value;
+
+      if (title && author && price) {
+        data.push({ title, author, price });
+        saveToLocalStorage(); // Save to localStorage
+        displayData(); // Update table
+        document.getElementById('createForm').reset(); // Clear form
+      }
+    });
+
+    // Edit record
+    function editRecord(index) {
+      const newTitle = prompt('Enter new title:', data[index].title);
+      const newAuthor = prompt('Enter new author:', data[index].author);
+      const newPrice = prompt('Enter new price:', data[index].price);
+
+      if (newTitle && newAuthor && newPrice) {
+        data[index].title = newTitle;
+        data[index].author = newAuthor;
+        data[index].price = newPrice;
+        saveToLocalStorage(); // Save the updated data
+        displayData(); // Update table
+      }
+    }
+
+    // Delete record
+    function deleteRecord(index) {
+      if (confirm('Are you sure you want to delete this book?')) {
+        data.splice(index, 1);
+        saveToLocalStorage(); // Save the updated data
+        displayData(); // Update table
+      }
+    }
+
+    // Load the data when the page is loaded
+    loadData();
+  </script>
+
+</body>
+
+</html>
